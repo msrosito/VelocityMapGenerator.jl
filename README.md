@@ -7,6 +7,7 @@ In the terminal type: ``julia``
 ```julia
 ] add SimSpin.jl
 ] add FITSIO.jl
+] add Plots.jl
 ```
 
 ## Run example

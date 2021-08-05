@@ -19,7 +19,7 @@ ngal=16 #number of files
 
 # Load data
 for k in 0:(ngal-1)
-    if (k!=1) || (k!=7) || (k!=15) #replace for a more general condition
+    if (k!=1) & (k!=7) & (k!=15) #replace for a more general condition
         data = sim_data(string(input_dir,"test_",k,".hdf5"), ssp=true)
 
         # Calculate datacube of fluxes regarding space and velocity bins

@@ -169,9 +169,6 @@ def DM_att(hf, sub_dark, nfiles= 16):
     c1 = coord[1][sub_dark]
     c2 = coord[2][sub_dark]
     Npart = len(c0)
-#    r = np.multiply(c0,c0)+np.multiply(c1,c1)+np.multiply(c2,c2)
-#    r = cm2kpc(np.sqrt(r))
-#    print('rs = ', min(r), max(r), np.median(r))
     x1 = part1.create_dataset("x", data=cm2kpc(c0))
     x1.attrs["Units"] = "kpc"
     x1.attrs["PartNum"] = Npart
@@ -222,8 +219,6 @@ def star_att(hf, sub_star, nfiles=16):
     Npart = len(c0)
     r = np.multiply(c0,c0)+np.multiply(c1,c1)+np.multiply(c2,c2)
     r = cm2kpc(np.sqrt(r))
-    print('rs = ', min(r), max(r), np.median(r))
-    print(Npart)
     x4 = part4.create_dataset("x", data=cm2kpc(c0))
     x4.attrs["Units"] = "kpc"
     x4.attrs["PartNum"] = Npart
@@ -240,7 +235,6 @@ def star_att(hf, sub_star, nfiles=16):
     v0 = vel[0][sub_star]
     v1 = vel[1][sub_star]
     v2 = vel[2][sub_star]
-    print('vel ', v2.shape)
     vx4 = part4.create_dataset("vx", data=cms2kms(v0))
     vx4.attrs["Units"] = "km/s"
     vx4.attrs["PartNum"] = Npart
@@ -254,14 +248,12 @@ def star_att(hf, sub_star, nfiles=16):
     # masses
     mass = read_dataset(4, "Mass", nfiles=16)
     mass = mass[sub_star]
-    print('mass ', mass.shape)
     mass4 = part4.create_dataset("Mass", data=gr210MSun(mass))
     mass4.attrs["Units"] = "1e10 Msol"
     mass4.attrs["PartNum"] = Npart   
     
     # initial masses
     
-    print('hola')
     im = read_dataset(4, "InitialMass", nfiles=16)
     im = im[sub_star]
     imass4 = part4.create_dataset("InitialMass", data=gr210MSun(im))
@@ -272,8 +264,6 @@ def star_att(hf, sub_star, nfiles=16):
     a = read_dataset(4, "StellarFormationTime", nfiles=16)
     a = a[sub_star]
     age4 = part4.create_dataset("StellarFormationTime", data=a)
-    print(len(age4))
-    print('hola2')
     age4.attrs["Units"] = "Expansion factor, a, where star particle forms"
     age4.attrs["PartNum"] = Npart
     
@@ -284,7 +274,7 @@ def star_att(hf, sub_star, nfiles=16):
     Z4 = part4.create_dataset("Metallicity", data=met)
     Z4.attrs["Units"] = "Smoothed mass fraction of elements heavier than Helium"
     Z4.attrs["PartNum"] = Npart
-    print('star final')
+
 
 
 ### EAGLE does not use particle types Disc and Bulge
@@ -309,7 +299,6 @@ hf = h5py.File(output_path + 'gr_1_sub_0.hdf5', "w")
 sub_gas = np.logical_and(Subs_gas == 0, Grs_gas == 1)
 f = np.ones(len(Subs_gas))
 N_gas = len(f[sub_gas])
-print('hola gas ', N_gas)
 if N_gas > 0:
     gas_att(hf, sub_gas, nfiles)
     
@@ -317,7 +306,6 @@ if N_gas > 0:
 sub_dark = np.logical_and(Subs_dark == 0, Grs_dark == 1)
 f = np.ones(len(Subs_dark))
 N_dark = len(f[sub_dark])
-print('hola dark ', N_dark)
 if N_dark > 0:
     DM_att(hf, sub_dark, nfiles)
     
@@ -325,9 +313,7 @@ if N_dark > 0:
 sub_star = np.logical_and(Subs_star == 0, Grs_star == 1)
 f = np.ones(len(Subs_star))
 N_star = len(f[sub_star])
-print('hola star ', N_star)
 if N_star > 0:
     star_att(hf, sub_star, nfiles)
-#    print('star final')
 
 hf.close()
